@@ -1,22 +1,22 @@
 import { StatusBar } from 'expo-status-bar';
 import { Image, StyleSheet, Text, View } from 'react-native';
 
-function Avatar() {
+function Avatar({ username, url }) {
   return (
     <View style={styles.avatarContainer}>
       <Image style={styles.avatar} source={{
-        uri: "https://www.gravatar.com/avatar/1?d=monsterid"
+        uri: url
       }} />
-      <Text style={styles.text}>Bobby Brown</Text>
+      <Text style={styles.text}>{username}</Text>
     </View>
   );
 }
-function Post() {
+function Post({ username, profileImage, image }) {
   return (
     <View style={styles.postContainer}>
-      <Avatar />
+      <Avatar username={username} url={profileImage} />
       <Image style={styles.postImage} source={{
-        uri: "https://www.gravatar.com/avatar/1?d=monsterid&s=200"
+        uri: image
       }} />
     </View>
   );
@@ -25,8 +25,8 @@ function Post() {
 export default function App() {
   return (
     <View style={styles.container}>
-      <Post />
-      <Post />
+      <Post username="Apple" profileImage="https://www.gravatar.com/avatar/1?d=monsterid" image="https://www.gravatar.com/avatar/1?d=monsterid&s=200" />
+      <Post username="Bobby" profileImage="https://www.gravatar.com/avatar/2?d=monsterid" image="https://www.gravatar.com/avatar/2?d=monsterid&s=200" />
     </View>
   );
 }
