@@ -1,15 +1,21 @@
+import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Text } from 'react-native-paper';
+import { Button, Text, TextInput } from 'react-native-paper';
 
 
 export default function App() {
-  let counter = 0;
+  const [counter, setCounter] = useState(0);
+  const [value, setValue] = useState('')
   return (
     <View style={styles.container}>
-      <Text>counter: ${counter}</Text>
-      <Button onPress={() => counter = counter + 1}>Increment</Button>
-      <Button onPress={() => counter = counter - 1}>Decrement</Button>
-    </View>
+      <Text>counter: {counter}</Text>
+      <Button onPress={() => setCounter(prevValue => prevValue + 1)}>Increment</Button>
+      <Button onPress={() => setCounter(prevValue => prevValue - 1)}> Decrement</Button>
+      <TextInput value={value} onChangeText={setValue} />
+      <Button onPress={() => {
+        console.log(`value of textinput was ${value}`);
+      }}>Submit</Button>
+    </View >
   );
 }
 
