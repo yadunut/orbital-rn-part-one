@@ -1,19 +1,33 @@
 import { useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { Button, Text, TextInput } from 'react-native-paper';
+import { Button, Checkbox, Text, TextInput } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 
-function TodoItem({ todo }) {
-  return (<View style={styles.todoItemContainer}><Text>{todo.title}</Text></View>)
+function TodoItem({ todo, updateTodo }) {
+  const handleCheckboxChange = () => {
+    updateTodo({ ...todo, completed: !todo.completed });
+  };
+
+  return (
+    <View style={styles.todoItemContainer}>
+      <Text>{todo.title}</Text>
+      <Checkbox.Android
+        status={todo.completed ? 'checked' : 'unchecked'}
+        onPress={handleCheckboxChange} />
+    </View>
+  );
 }
 
-function TodoInput() {
-  const handleButtonPress = () => { }
+function TodoInput({ addTodo }) {
+  const [text, setText] = useState();
+  const handleButtonPress = () => {
+    addTodo({ title: text, completed: false });
+  }
   return (
     <View style={styles.todoInputContainer}>
-      <TextInput style={styles.textInput} />
+      <TextInput style={styles.textInput} value={text} onChangeText={setText} />
       <Button onPress={handleButtonPress} mode="contained" style={styles.button}>Submit</Button>
     </View>
   );
@@ -40,7 +54,7 @@ function Todos() {
   function addTodo(todo) {
     setTodos(existingItems => {
       const id = existingItems[existingItems.length - 1].id + 1;
-      return [...existingItems, { id, ...todo }];
+      return [...existingItems, { id, ...todo, createdAt: new Date() }];
     });
   }
 
@@ -61,8 +75,8 @@ function Todos() {
     <View style={styles.todosContainer}>
       <FlatList
         data={todos}
-        renderItem={({ item }) => <TodoItem todo={item} />}
-        ListFooterComponent={() => <TodoInput />} />
+        renderItem={({ item }) => <TodoItem todo={item} updateTodo={updateTodo} />}
+        ListFooterComponent={() => <TodoInput addTodo={addTodo} />} />
     </View>
   )
 }
@@ -80,6 +94,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    padding: 10,
   },
   todosContainer: {
   },
@@ -95,7 +110,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   todoItemContainer: {
-    backgroundColor: 'blue',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 10,
+    paddingBottom: 10,
   }
-
 });
