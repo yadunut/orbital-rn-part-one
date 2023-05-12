@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { Button, Checkbox, Text, TextInput } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 
 
 
@@ -67,16 +67,16 @@ function Todos() {
         ...existingItems.slice(itemIndex + 1)
       ];
     })
-
-    // this is not the proper way to do this.
   }
 
   return (
-    <View style={styles.todosContainer}>
+    <View style={{ flex: 1 }}>
       <FlatList
+        style={styles.todosContainer}
         data={todos}
         renderItem={({ item }) => <TodoItem todo={item} updateTodo={updateTodo} />}
-        ListFooterComponent={() => <TodoInput addTodo={addTodo} />} />
+      />
+      <TodoInput addTodo={addTodo} />
     </View>
   )
 }
@@ -84,9 +84,11 @@ function Todos() {
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <Todos />
-    </SafeAreaView>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        <Todos />
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
@@ -95,8 +97,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 10,
-  },
-  todosContainer: {
   },
   todoInputContainer: {
     flexDirection: 'row',
